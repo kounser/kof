@@ -11,7 +11,7 @@ class Player extends GameObject {
         this.width = info.width;
         this.height = info.height;
         this.color = info.color;
-        this.direction = 1; // 朝向
+        this.direction = 1; // face to
         this.vx = 0;
         this.vy = 0;
 
@@ -20,8 +20,9 @@ class Player extends GameObject {
         this.gravity = 18; // 重力加速度
         this.pressed_keys = this.root.game_map.controller.pressed_keys;
         this.status = 3; // 0: idle, 1: front, 2: back, 3: jump, 4: attack, 5: Beaten, 6: dead
+        this.animations = new Map()
         this.ctx = this.root.game_map.ctx;
-
+        this.frame_current_cnt = 0;
 
     }
 
@@ -35,11 +36,6 @@ class Player extends GameObject {
         this.render();
     }
 
-    render() {
-
-        this.ctx.fillStyle = this.color;
-        this.ctx.fillRect(this.x, this.y, this.width, this.height);
-    }
     update_move() {
         this.vy += this.gravity;
         this.x += this.vx * this.timedelta / 1000;
@@ -97,6 +93,20 @@ class Player extends GameObject {
                 this.vx = 0;
                 this.status = 0;
             }
+        }
+    }
+
+    render() {
+
+        // this.ctx.fillStyle = this.color;
+        // this.ctx.fillRect(this.x, this.y, this.width, this.height);
+        let status = this.status;
+
+        let obj = this.animations.get(status);
+        if (obj && obj.loaded) {
+            let k = parseInt(this.frame_current_cnt / obj.frame_rate) % obj.frame_cnt;
+            let image = obj.gif.frames[k].image;
+            this.ctx.drawImage(image, this.x, this.y, image.width, image.height);
         }
     }
 

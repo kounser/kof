@@ -23,8 +23,6 @@ class GameMap extends GameObject {
     render() {
         this.ctx.fillStyle = 'black';
         this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
-
-
     }
 }
 export {
